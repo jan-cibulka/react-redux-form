@@ -8,6 +8,7 @@ export function makeStore() {
     reducer: { general: generalReducer, form: reduxFormReducer },
     middleware: getDefaultMiddleware({
       serializableCheck: false,
+      immutableCheck: false,
     }),
   });
 }

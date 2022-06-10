@@ -1,14 +1,16 @@
-import { Box, Button, Table, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useCallback, useState } from 'react';
-import { fetchData } from '../features/counter/form/formApi';
+import Form from '~/src/components/Form';
+import Table from '../components/Table';
+import { fetchStoredFiles } from '../features/counter/form/formApi';
 
 const IndexPage: NextPage = (): JSX.Element => {
   const [data, setData] = useState([]);
 
   const handleFetchClick = useCallback(async () => {
-    const { data, result } = await fetchData();
+    const { data, result } = await fetchStoredFiles();
 
     setData(data);
     console.log(data, result);
@@ -29,6 +31,7 @@ const IndexPage: NextPage = (): JSX.Element => {
           </Button>
         </Box>
         <Box>{JSON.stringify(data)}</Box>
+        <Form />
         <Table />
       </Box>
     </Box>

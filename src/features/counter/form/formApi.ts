@@ -1,25 +1,33 @@
-import { FetchDataSchema, FileUpload } from '../../../model/FileUploadModel';
+import {
+  FetchStoredFilesResponseSchema,
+  FetchStoredFilesResponseBody,
+  SubmitFileInfoRequestBody,
+  SubmitFileInfoResponseBody,
+  SubmitFileInfoResponseSchema,
+} from '../../../model/schema';
 
 const apiUrl = 'https://my-app-yikvv.ondigitalocean.app';
 
-export type FetchResult = {
-  data: FileUpload[];
+export type FetchResultResponse = {
+  data: FetchStoredFilesResponseBody;
+  result: ApiCallResult;
+};
+
+export type SubmitFileInfoResponse = {
+  data: SubmitFileInfoResponseBody;
   result: ApiCallResult;
 };
 
 export type ApiCallResult = 'success' | 'failure';
 
-export async function fetchData(): Promise<FetchResult> {
+export async function fetchStoredFiles(): Promise<FetchResultResponse> {
   try {
-    console.log('will fetch');
-
     const response = await fetch(`${apiUrl}/data`, {
       method: 'GET',
     });
 
     const result = await response.json();
-
-    const parsedResult = FetchDataSchema.safeParse(result);
+    const parsedResult = FetchStoredFilesResponseSchema.safeParse(result);
 
     if (parsedResult.success) {
       return { data: parsedResult.data, result: 'success' };
@@ -29,4 +37,26 @@ export async function fetchData(): Promise<FetchResult> {
   }
 
   return { data: [], result: 'failure' };
+}
+
+export async function submitFileInfo(data: SubmitFileInfoRequestBody): Promise<SubmitFileInfoResponse> {
+  try {
+    console.log('will submit', data);
+    const response = await fetch(`${apiUrl}/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    const parsedResult = SubmitFileInfoResponseSchema.safeParse(result);
+
+    if (parsedResult.success) {
+      return { data: parsedResult.data, result: 'success' };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  return { data: {}, result: 'failure' };
 }

@@ -2,10 +2,10 @@ import '../styles/globals.css';
 
 import { Provider } from 'react-redux';
 import type { AppProps } from 'next/app';
-import store from '../app/store';
 import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import store from '../app/store';
 import theme from '../theme/theme';
 
 function App(props: AppProps): JSX.Element {

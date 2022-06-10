@@ -10,17 +10,22 @@ export type FetchResult = {
 export type ApiCallResult = 'success' | 'failure';
 
 export async function fetchData(): Promise<FetchResult> {
-  console.log('will fetch');
-  const response = await fetch(`${apiUrl}/data`, {
-    method: 'GET',
-  });
+  try {
+    console.log('will fetch');
 
-  const result = await response.json();
+    const response = await fetch(`${apiUrl}/data`, {
+      method: 'GET',
+    });
 
-  const parsedResult = FetchDataSchema.safeParse(result);
+    const result = await response.json();
 
-  if (parsedResult.success) {
-    return { data: parsedResult.data, result: 'success' };
+    const parsedResult = FetchDataSchema.safeParse(result);
+
+    if (parsedResult.success) {
+      return { data: parsedResult.data, result: 'success' };
+    }
+  } catch (error) {
+    console.log(error);
   }
 
   return { data: [], result: 'failure' };

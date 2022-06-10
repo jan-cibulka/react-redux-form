@@ -1,44 +1,66 @@
 import { Box, Button } from '@mui/material';
 import React, { useCallback } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import { submitFileInfo } from '../features/counter/form/formApi';
 import { SubmitFileInfoSchema } from '../model/schema';
+import CustomField from './Field';
+
+const validate = (values: any) => {
+  const errors = {};
+  console.log(values);
+  //name
+  if (!values.name) {
+    errors['name'] = 'Required';
+  } else if (values.name.length < 1) {
+    errors['name'] = 'Must be at least one character';
+  } else if (values.name.length > 100) {
+    errors['name'] = 'Name is too long';
+  }
+
+  //height
+  if (!values.height) {
+    errors['height'] = 'Required';
+  } else if (values.height < 0) {
+    errors['height'] = 'Must be positive integer.';
+  } else if (values.height > 500) {
+    errors['height'] = 'Must be 500 or less';
+  }
+
+  return errors;
+};
 
 const SimpleForm = props => {
-  const { handleSubmit, pristine, reset, submitting } = props;
+  const { handleSubmit, pristine, submitting, reset, valid } = props;
 
-  const submit = useCallback(async values => {
-    console.log(values);
-    const safeValues = SubmitFileInfoSchema.safeParse(values);
-    if (safeValues.success) {
-      const result = await submitFileInfo(safeValues.data);
-      console.log(result);
-    } else {
-      console.log(safeValues['error']);
-    }
-  }, []);
+  const submit = useCallback(
+    async values => {
+      const safeValues = SubmitFileInfoSchema.safeParse(values);
+      if (safeValues.success) {
+        const result = await submitFileInfo(safeValues.data);
+        console.log(result);
+        reset();
+      } else {
+        console.log(safeValues['error']);
+      }
+    },
+    [reset],
+  );
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <Box>
-        <label>Name</label>
-        <div>
-          <Field name="name" component="input" type="text" placeholder="Name" />
-        </div>
-      </Box>
-      <Box>
-        <label>Height</label>
-        <div>
-          <Field name="height" component="input" type="number" parse={value => Number(value)} />
-        </div>
-      </Box>
+      <Field name="name" component={CustomField} type="text" placeholder="Name" />
+
+      <Field
+        name="height"
+        component={CustomField}
+        type="number"
+        parse={value => Number(value) ?? ''}
+        placeholder="Height"
+      />
 
       <Box sx={{ mt: 5, display: 'flex', gap: 4 }}>
-        <Button variant="contained" color="primary" type="submit" disabled={pristine || submitting}>
+        <Button variant="contained" color="primary" type="submit" disabled={pristine || submitting || !valid}>
           Submit
-        </Button>
-        <Button variant="contained" color="warning" type="button" disabled={pristine || submitting} onClick={reset}>
-          Clear Values
         </Button>
       </Box>
     </form>
@@ -47,5 +69,5 @@ const SimpleForm = props => {
 
 export default reduxForm({
   form: 'simple',
-  initialValues: { name: 'TestName', height: 123 },
+  validate,
 })(SimpleForm);

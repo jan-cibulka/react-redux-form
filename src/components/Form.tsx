@@ -1,16 +1,17 @@
 import { Box, Button } from '@mui/material';
 import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { submitFile, submitFileInfo } from '../form/formApi';
 import { SubmitFileInfoSchema } from '../model/schema';
-import { setUploadId } from '../store/generalSlice';
+
 import { AppState } from '../store/store';
 import CustomField from './Field';
 import FileUploadField from './FileUploadField';
 
 const validate = (values: any) => {
   const errors = {};
+  console.log('validate', values);
   //name
   if (!values.name) {
     errors['name'] = 'Required';
@@ -29,38 +30,36 @@ const validate = (values: any) => {
     errors['height'] = 'Must be 500 or less';
   }
 
+  //file
+  if (!values.upload) {
+    errors['upload'] = 'Required';
+  }
+
   return errors;
 };
 
 const SimpleForm = props => {
+  const form = useSelector((state: AppState) => state.form);
   const { handleSubmit, pristine, submitting, reset, valid } = props;
-  const uploadId = useSelector((state: AppState) => state.general.uploadId);
   const selectedFile = useSelector((state: AppState) => state.general.selectedFile);
-  const dispatch = useDispatch();
   const submit = useCallback(
     async values => {
       const safeValues = SubmitFileInfoSchema.safeParse(values);
       if (safeValues.success) {
-        const result1 = await submitFileInfo(safeValues.data);
-
-        dispatch(setUploadId(result1.data.uploadId));
-
-        const result2 = submitFile(result1.data.uploadId, selectedFile);
-        console.log(result1, result2);
+        const { data: fileInfo } = await submitFileInfo(safeValues.data);
+        const { data: fileUploadResult } = await submitFile(fileInfo.uploadId, selectedFile);
+        console.log(fileInfo, fileUploadResult);
         reset();
       } else {
         console.log(safeValues['error']);
       }
     },
-    [dispatch, reset, selectedFile],
+    [reset, selectedFile],
   );
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      {uploadId}
-
       <Field name="name" component={CustomField} type="text" placeholder="Name" />
-
       <Field
         name="height"
         component={CustomField}
@@ -75,6 +74,7 @@ const SimpleForm = props => {
           Submit
         </Button>
       </Box>
+      <pre>{JSON.stringify(form, undefined, 2)}</pre>
     </form>
   );
 };

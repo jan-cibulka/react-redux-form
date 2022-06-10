@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from '@mui/material';
 
 const Field = (props: any): JSX.Element => {
-  // console.log(props);
+  console.log(props);
   const theme = useTheme();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 4, height: 100 }}>

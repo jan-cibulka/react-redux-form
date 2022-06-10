@@ -37,7 +37,7 @@ export async function fetchStoredFiles(): Promise<FetchResultResponse> {
     const parsedResult = FetchStoredFilesResponseSchema.safeParse(result);
 
     if (parsedResult.success) {
-      return { data: parsedResult.data, result: 'success' };
+      return { data: parsedResult.data.sort(), result: 'success' };
     }
   } catch (error) {
     console.log(error);

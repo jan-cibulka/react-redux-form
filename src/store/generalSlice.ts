@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { StoredFile } from '../model/schema';
 
-export interface CounterState {
+export interface GeneralState {
   uploadId?: string;
   fetchedData: StoredFile[];
   selectedFile?: File;
 }
 
-const initialState: CounterState = {
+const initialState: GeneralState = {
   uploadId: 'default',
   fetchedData: [],
   selectedFile: undefined,

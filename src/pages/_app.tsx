@@ -5,7 +5,7 @@ import type { AppProps } from 'next/app';
 import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import store from '../app/store';
+import store from '../store/store';
 import theme from '../theme/theme';
 
 function App(props: AppProps): JSX.Element {

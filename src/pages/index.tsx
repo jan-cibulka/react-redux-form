@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useCallback, useState } from 'react';
 import Form from '~/src/components/Form';
 import Table from '../components/Table';
-import { fetchStoredFiles } from '../features/counter/form/formApi';
+import { fetchStoredFiles } from '../form/formApi';
 
 const IndexPage: NextPage = (): JSX.Element => {
   const [data, setData] = useState([]);

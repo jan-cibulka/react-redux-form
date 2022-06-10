@@ -1,13 +1,16 @@
 import { Box, Button } from '@mui/material';
 import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { submitFileInfo } from '../features/counter/form/formApi';
+import { submitFile, submitFileInfo } from '../form/formApi';
 import { SubmitFileInfoSchema } from '../model/schema';
+import { setUploadId } from '../store/generalSlice';
+import { AppState } from '../store/store';
 import CustomField from './Field';
+import FileUploadField from './FileUploadField';
 
 const validate = (values: any) => {
   const errors = {};
-  console.log(values);
   //name
   if (!values.name) {
     errors['name'] = 'Required';
@@ -31,23 +34,31 @@ const validate = (values: any) => {
 
 const SimpleForm = props => {
   const { handleSubmit, pristine, submitting, reset, valid } = props;
-
+  const uploadId = useSelector((state: AppState) => state.general.uploadId);
+  const selectedFile = useSelector((state: AppState) => state.general.selectedFile);
+  const dispatch = useDispatch();
   const submit = useCallback(
     async values => {
       const safeValues = SubmitFileInfoSchema.safeParse(values);
       if (safeValues.success) {
-        const result = await submitFileInfo(safeValues.data);
-        console.log(result);
+        const result1 = await submitFileInfo(safeValues.data);
+
+        dispatch(setUploadId(result1.data.uploadId));
+
+        const result2 = submitFile(result1.data.uploadId, selectedFile);
+        console.log(result1, result2);
         reset();
       } else {
         console.log(safeValues['error']);
       }
     },
-    [reset],
+    [dispatch, reset, selectedFile],
   );
 
   return (
     <form onSubmit={handleSubmit(submit)}>
+      {uploadId}
+
       <Field name="name" component={CustomField} type="text" placeholder="Name" />
 
       <Field
@@ -58,6 +69,7 @@ const SimpleForm = props => {
         placeholder="Height"
       />
 
+      <Field name="upload" component={FileUploadField} placeholder="Upload" />
       <Box sx={{ mt: 5, display: 'flex', gap: 4 }}>
         <Button variant="contained" color="primary" type="submit" disabled={pristine || submitting || !valid}>
           Submit
@@ -68,6 +80,6 @@ const SimpleForm = props => {
 };
 
 export default reduxForm({
-  form: 'simple',
+  form: 'main',
   validate,
 })(SimpleForm);

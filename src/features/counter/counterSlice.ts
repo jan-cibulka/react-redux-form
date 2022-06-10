@@ -63,7 +63,6 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const selectCount = (state: AppState) => state.counter.value;
 
 // We can also write thunks by hand, which may contain both sync and async logic.

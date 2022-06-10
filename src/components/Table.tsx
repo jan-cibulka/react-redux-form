@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { AppState } from '../app/store';
+import { AppState } from '../store/store';
 
 const Table = (): JSX.Element => {
   const form = useSelector((state: AppState) => state.form);

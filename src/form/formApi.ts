@@ -4,7 +4,9 @@ import {
   SubmitFileInfoRequestBody,
   SubmitFileInfoResponseBody,
   SubmitFileInfoResponseSchema,
-} from '../../../model/schema';
+  UploadFileResponseBody,
+  UploadFileResponseSchema,
+} from '../model/schema';
 
 const apiUrl = 'https://my-app-yikvv.ondigitalocean.app';
 
@@ -15,6 +17,11 @@ export type FetchResultResponse = {
 
 export type SubmitFileInfoResponse = {
   data: SubmitFileInfoResponseBody;
+  result: ApiCallResult;
+};
+
+export type UploadFileResponse = {
+  data: UploadFileResponseBody;
   result: ApiCallResult;
 };
 
@@ -50,6 +57,31 @@ export async function submitFileInfo(data: SubmitFileInfoRequestBody): Promise<S
 
     const result = await response.json();
     const parsedResult = SubmitFileInfoResponseSchema.safeParse(result);
+
+    if (parsedResult.success) {
+      return { data: parsedResult.data, result: 'success' };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  return { data: {}, result: 'failure' };
+}
+
+export async function submitFile(uploadId: string, file: File): Promise<UploadFileResponse> {
+  try {
+    console.log('will submitfile', uploadId, file);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${apiUrl}/upload/${uploadId}`, {
+      method: 'POST',
+
+      body: formData,
+    });
+
+    const result = await response.json();
+    const parsedResult = UploadFileResponseSchema.safeParse(result);
 
     if (parsedResult.success) {
       return { data: parsedResult.data, result: 'success' };

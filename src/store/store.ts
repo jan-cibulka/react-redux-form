@@ -1,11 +1,14 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { reducer as reduxFormReducer } from 'redux-form';
-import counterReducer from '../features/counter/counterSlice';
+import generalReducer from './generalSlice';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function makeStore() {
   return configureStore({
-    reducer: { counter: counterReducer, form: reduxFormReducer },
+    reducer: { general: generalReducer, form: reduxFormReducer },
+    middleware: getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   });
 }
 

@@ -3,13 +3,13 @@ import { StoredFile } from '../model/schema';
 
 export interface GeneralState {
   uploadId?: string;
-  fetchedData: StoredFile[];
+  storedFiles: StoredFile[];
   selectedFile?: File;
 }
 
 const initialState: GeneralState = {
   uploadId: 'default',
-  fetchedData: [],
+  storedFiles: [],
   selectedFile: undefined,
 };
 
@@ -20,8 +20,8 @@ export const counterSlice = createSlice({
     setUploadId: (state, action: PayloadAction<string>) => {
       state.uploadId = action.payload;
     },
-    setFetchedData: (state, action: PayloadAction<StoredFile[]>) => {
-      state.fetchedData = action.payload;
+    setStoredFiles: (state, action: PayloadAction<StoredFile[]>) => {
+      state.storedFiles = action.payload;
     },
     setSelectedFile: (state, action: PayloadAction<File>) => {
       state.selectedFile = action.payload;
@@ -29,6 +29,6 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { setUploadId, setFetchedData, setSelectedFile } = counterSlice.actions;
+export const { setUploadId, setStoredFiles, setSelectedFile } = counterSlice.actions;
 
 export default counterSlice.reducer;

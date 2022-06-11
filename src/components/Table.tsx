@@ -1,22 +1,13 @@
 import { TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, Table as MuiTable } from '@mui/material';
-import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchStoredFiles } from '../form/formApi';
-import { useInterval } from '../hooks/useInterval';
-import { setFetchedData } from '../store/generalSlice';
+// import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+// import { fetchStoredFiles } from '../form/formApi';
+// import { useInterval } from '../hooks/useInterval';
+// import { setStoredFiles } from '../store/generalSlice';
 import { AppState } from '../store/store';
 
 const Table = (): JSX.Element => {
-  const data = useSelector((state: AppState) => state.general.fetchedData);
-  const dispatch = useDispatch();
-
-  const fetchData = useCallback(async () => {
-    const { data } = await fetchStoredFiles();
-    dispatch(setFetchedData(data));
-  }, [dispatch]);
-
-  useInterval(fetchData, 10000);
-
+  const data = useSelector((state: AppState) => state.general.storedFiles);
   return (
     <TableContainer component={Paper}>
       <MuiTable sx={{ minWidth: 650 }}>

@@ -7,6 +7,12 @@ const StoredFileSchema = z.object({
   file: z.string(),
 });
 
+const FormValuesSchema = z.object({
+  name: z.string(),
+  height: z.number(),
+  upload: z.any(),
+});
+
 const FetchStoredFilesResponseSchema = z.array(StoredFileSchema);
 
 const SubmitFileInfoSchema = z.object({
@@ -32,6 +38,7 @@ type SubmitFileInfoResponseBody = z.infer<typeof SubmitFileInfoResponseSchema>;
 type UploadFileRequestBody = z.infer<typeof UploadFileSchema>;
 type UploadFileResponseBody = z.infer<typeof UploadFileResponseSchema>;
 type FetchStoredFilesResponseBody = z.infer<typeof FetchStoredFilesResponseSchema>;
+type FormValues = z.infer<typeof FormValuesSchema>;
 
 // other types
 type StoredFile = z.infer<typeof StoredFileSchema>;
@@ -43,6 +50,7 @@ export {
   UploadFileSchema,
   UploadFileResponseSchema,
   FetchStoredFilesResponseSchema,
+  FormValuesSchema,
 };
 export type {
   SubmitFileInfoRequestBody,
@@ -51,4 +59,5 @@ export type {
   UploadFileResponseBody,
   FetchStoredFilesResponseBody,
   StoredFile,
+  FormValues,
 };

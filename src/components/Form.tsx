@@ -3,11 +3,11 @@ import React, { useCallback } from 'react';
 
 import { useSelector } from 'react-redux';
 import { reduxForm, Field, Form } from 'redux-form';
-import { submitFile, submitFileInfo } from '../form/formApi';
-import { SubmitFileInfoSchema } from '../model/schema';
+import { FormValuesSchema } from '../model/schema';
+import FormService from '../service/FormService';
 
 import { AppState } from '../store/store';
-import CustomField from './Field';
+import CustomField from './CustomField';
 import FileUploadField from './FileUploadField';
 
 const validate = (values: any) => {
@@ -23,7 +23,7 @@ const validate = (values: any) => {
   }
 
   //height
-  if (!values.height) {
+  if (!values.height && values.height != 0) {
     errors['height'] = 'Required';
   } else if (values.height < 0) {
     errors['height'] = 'Must be positive integer';
@@ -46,11 +46,12 @@ const SimpleForm = props => {
   const { handleSubmit, pristine, submitting, reset, valid } = props;
   const submit = useCallback(
     async values => {
-      const safeValues = SubmitFileInfoSchema.safeParse(values);
+      const safeValues = FormValuesSchema.safeParse(values);
       if (safeValues.success) {
-        const { data: fileInfo } = await submitFileInfo(safeValues.data);
-        const { data: fileUploadResult } = await submitFile(fileInfo.uploadId, values.upload);
-        console.log(fileInfo, fileUploadResult);
+        // const { data: fileInfo } = await submitFileInfo(safeValues.data);
+        // const { data: fileUploadResult } = await submitFile(fileInfo.uploadId, values.upload);
+        // console.log(fileInfo, fileUploadResult);
+        FormService.submitForm(safeValues.data);
         reset();
       } else {
         console.log(safeValues['error']);
@@ -62,13 +63,14 @@ const SimpleForm = props => {
   return (
     <Box sx={{ maxWidth: 1, overflow: 'hidden', width: 0.5 }}>
       <Form onSubmit={handleSubmit(submit)}>
-        <Field name="name" component={CustomField} type="text" placeholder="Name" />
+        <Field name="name" component={CustomField} type="text" label="Name" />
         <Field
           name="height"
           component={CustomField}
           type="number"
           parse={value => (value ? Number(value) : '')}
           placeholder="Height"
+          label="Height"
         />
 
         {/* <Field name="upload" component={FileUploadField} placeholder="Upload" /> */}

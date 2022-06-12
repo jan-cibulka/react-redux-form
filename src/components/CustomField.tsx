@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme, Input } from '@mui/material';
 
 const Field = (props: any): JSX.Element => {
   const theme = useTheme();
@@ -7,7 +7,7 @@ const Field = (props: any): JSX.Element => {
       <Typography variant="h6">{props.label}</Typography>
       {/* <pre>{JSON.stringify(props.meta, undefined, 2)}</pre> */}
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <input {...props.input} placeholder={props.placeholder} type={props.type} />
+        <Input {...props.input} placeholder={props.placeholder} type={props.type} />
         {props.meta && props.meta.dirty && <Typography color={theme.palette.error.main}>{props.meta.error}</Typography>}
       </Box>
     </Box>

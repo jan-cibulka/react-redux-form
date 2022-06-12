@@ -1,18 +1,17 @@
 import { Box, Button } from '@mui/material';
 import React, { useCallback } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { reduxForm, Field, Form } from 'redux-form';
 import { FormValuesSchema } from '../model/schema';
 import FormService from '../service/FormService';
 
-import { AppState } from '../store/store';
 import CustomField from './CustomField';
 import FileUploadField from './FileUploadField';
 
+export const formName = 'main';
 const validate = (values: any) => {
   const errors = {};
-  console.log('validate', values);
   //name
   if (!values.name) {
     errors['name'] = 'Required';
@@ -42,22 +41,17 @@ const validate = (values: any) => {
 };
 
 const SimpleForm = props => {
-  const form = useSelector((state: AppState) => state.form);
   const { handleSubmit, pristine, submitting, reset, valid } = props;
+  const dispatch = useDispatch();
   const submit = useCallback(
     async values => {
       const safeValues = FormValuesSchema.safeParse(values);
       if (safeValues.success) {
-        // const { data: fileInfo } = await submitFileInfo(safeValues.data);
-        // const { data: fileUploadResult } = await submitFile(fileInfo.uploadId, values.upload);
-        // console.log(fileInfo, fileUploadResult);
-        FormService.submitForm(safeValues.data);
+        FormService.submitForm(safeValues.data, dispatch);
         reset();
-      } else {
-        console.log(safeValues['error']);
       }
     },
-    [reset],
+    [reset, dispatch],
   );
 
   return (
@@ -76,18 +70,18 @@ const SimpleForm = props => {
         {/* <Field name="upload" component={FileUploadField} placeholder="Upload" /> */}
         <Field name="upload" component={FileUploadField} type="file" />
 
-        <Box sx={{ mt: 5, display: 'flex', gap: 4 }}>
+        <Box sx={{ mt: 5, display: 'flex', gap: 4, justifyContent: 'center' }}>
           <Button variant="contained" color="primary" type="submit" disabled={pristine || submitting || !valid}>
             Submit
           </Button>
         </Box>
-        <pre>{JSON.stringify(form, undefined, 2)}</pre>
+        {/* <pre>{JSON.stringify(form, undefined, 2)}</pre> */}
       </Form>
     </Box>
   );
 };
 
 export default reduxForm({
-  form: 'main',
+  form: formName,
   validate,
 })(SimpleForm);

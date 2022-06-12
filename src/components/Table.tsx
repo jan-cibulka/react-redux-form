@@ -19,7 +19,8 @@ const Table = (): JSX.Element => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, i) => (
+          {/* remove slice? */}
+          {data.slice(0, 5).map((row, i) => (
             <TableRow key={row.name + i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
                 {row.name}

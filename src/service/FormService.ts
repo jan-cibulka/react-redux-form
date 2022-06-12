@@ -1,4 +1,4 @@
-import { Dispatch } from '@reduxjs/toolkit';
+import { Action, Dispatch } from '@reduxjs/toolkit';
 import http from '~/src/common/http';
 import {
   FetchStoredFilesResponseSchema,
@@ -6,12 +6,13 @@ import {
   SubmitFileInfoResponseSchema,
   UploadFileResponseSchema,
 } from '../model/schema';
-import { setStoredFiles } from '../store/generalSlice';
+import { setProgress, setStatus, setStoredFiles } from '../store/generalSlice';
 class FormService {
-  async submitForm(values: FormValues) {
+  async submitForm(values: FormValues, dispatch: Dispatch<Action>) {
+    dispatch(setStatus('working'));
     const uploadId = await this.submitFileInfo(values);
     if (uploadId) {
-      this.uploadFile(uploadId, values.upload);
+      this.uploadFile(uploadId, values.upload, dispatch);
     }
   }
   private async submitFileInfo(values: FormValues) {
@@ -26,22 +27,20 @@ class FormService {
     }
     return null;
   }
-  private async uploadFile(uploadId: string, file: File) {
+  private async uploadFile(uploadId: string, file: File, dispatch: Dispatch<Action>) {
     const formData = new FormData();
     formData.append('file', file);
-    const { data } = await http.post(`/upload/${uploadId}`, formData);
+    const { data } = await http.post(`/upload/${uploadId}`, formData, {
+      onUploadProgress: event => {
+        dispatch(setProgress({ loaded: event.loaded, total: event.total }));
+      },
+    });
     const safeUploadFileResponse = UploadFileResponseSchema.safeParse(data);
     if (safeUploadFileResponse.success) {
-      console.log('upload success');
+      dispatch(setStatus('success'));
     }
   }
-  upload(file, onUploadProgress) {
-    const formData = new FormData();
-    formData.append('file', file);
-    return http.post('/upload', formData, {
-      onUploadProgress,
-    });
-  }
+
   async reloadData(dispatch: Dispatch<any>) {
     const { data } = await http.get('/data');
     if (data) {

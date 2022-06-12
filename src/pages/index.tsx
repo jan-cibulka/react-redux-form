@@ -1,26 +1,27 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Chip, Typography } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
 import { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from '~/src/components/Form';
+import Progress from '../components/Progress';
 import Table from '../components/Table';
 import { useInterval } from '../hooks/useInterval';
 import FormService from '../service/FormService';
+import { AppState } from '../store/store';
 
 const IndexPage: NextPage = (): JSX.Element => {
   const dispatch = useDispatch();
+  const status = useSelector((state: AppState) => state.general.status);
 
   const reloadData = useCallback(async () => {
     await FormService.reloadData(dispatch);
-    console.log('tady');
   }, [dispatch]);
 
   useInterval(reloadData, 10000);
 
   useEffect(() => {
-    console.log('tady2');
     reloadData();
   }, [reloadData]);
 
@@ -34,6 +35,12 @@ const IndexPage: NextPage = (): JSX.Element => {
           <Typography variant="h3">File Upload Form</Typography>
         </Box>
         <Form />
+        <Box sx={{ opacity: status === 'working' ? 1 : 0 }}>
+          <Progress />
+        </Box>
+
+        {status === 'success' && <Chip label="success" color="success" />}
+
         <Table />
       </Box>
     </Box>

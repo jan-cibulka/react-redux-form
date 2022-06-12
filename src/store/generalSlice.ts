@@ -1,34 +1,36 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { StoredFile } from '../model/schema';
 
+type Progress = { total: number; loaded: number };
+type UploadStatus = 'idle' | 'working' | 'success';
 export interface GeneralState {
-  uploadId?: string;
   storedFiles: StoredFile[];
-  selectedFile?: File;
+  progress: Progress;
+  status: UploadStatus;
 }
 
 const initialState: GeneralState = {
-  uploadId: 'default',
   storedFiles: [],
-  selectedFile: undefined,
+  progress: { loaded: 0, total: 0 },
+  status: 'idle',
 };
 
 export const counterSlice = createSlice({
   name: 'counter',
   initialState,
   reducers: {
-    setUploadId: (state, action: PayloadAction<string>) => {
-      state.uploadId = action.payload;
+    setProgress: (state, action: PayloadAction<Progress>) => {
+      state.progress = action.payload;
+    },
+    setStatus: (state, action: PayloadAction<UploadStatus>) => {
+      state.status = action.payload;
     },
     setStoredFiles: (state, action: PayloadAction<StoredFile[]>) => {
       state.storedFiles = action.payload;
     },
-    setSelectedFile: (state, action: PayloadAction<File>) => {
-      state.selectedFile = action.payload;
-    },
   },
 });
 
-export const { setUploadId, setStoredFiles, setSelectedFile } = counterSlice.actions;
+export const { setStoredFiles, setProgress, setStatus } = counterSlice.actions;
 
 export default counterSlice.reducer;

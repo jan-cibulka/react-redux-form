@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { StoredFile } from '../model/schema';
 
 type Progress = { total: number; loaded: number };
-type UploadStatus = 'idle' | 'working' | 'success';
+type UploadStatus = 'initial' | 'working' | 'success';
 export interface GeneralState {
   storedFiles: StoredFile[];
   progress: Progress;
@@ -12,11 +12,11 @@ export interface GeneralState {
 const initialState: GeneralState = {
   storedFiles: [],
   progress: { loaded: 0, total: 0 },
-  status: 'idle',
+  status: 'initial',
 };
 
-export const counterSlice = createSlice({
-  name: 'counter',
+export const generalSlice = createSlice({
+  name: 'general',
   initialState,
   reducers: {
     setProgress: (state, action: PayloadAction<Progress>) => {
@@ -31,6 +31,6 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { setStoredFiles, setProgress, setStatus } = counterSlice.actions;
+export const { setStoredFiles, setProgress, setStatus } = generalSlice.actions;
 
-export default counterSlice.reducer;
+export default generalSlice.reducer;

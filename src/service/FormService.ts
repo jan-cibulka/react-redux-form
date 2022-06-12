@@ -38,15 +38,16 @@ class FormService {
     const safeUploadFileResponse = UploadFileResponseSchema.safeParse(data);
     if (safeUploadFileResponse.success) {
       dispatch(setStatus('success'));
+      this.reloadData(dispatch);
     }
   }
 
-  async reloadData(dispatch: Dispatch<any>) {
+  async reloadData(dispatch: Dispatch<Action>) {
     const { data } = await http.get('/data');
     if (data) {
       const safeData = FetchStoredFilesResponseSchema.safeParse(data);
       if (safeData.success) {
-        dispatch(setStoredFiles(safeData.data));
+        dispatch(setStoredFiles(safeData.data.sort((a, b) => a.name.localeCompare(b.name))));
       }
     }
   }

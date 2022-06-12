@@ -30,17 +30,17 @@ const IndexPage: NextPage = (): JSX.Element => {
       <Head>
         <title>Form Website</title>
       </Head>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'center', mt: 10, p: 10 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'center', p: 5 }}>
         <Box>
           <Typography variant="h3">File Upload Form</Typography>
         </Box>
         <Form />
-        <Box sx={{ opacity: status === 'working' ? 1 : 0 }}>
+        <Box sx={{ opacity: status === 'working' || status === 'success' ? 1 : 0, width: 1 }}>
           <Progress />
         </Box>
-
-        {status === 'success' && <Chip label="success" color="success" />}
-
+        <Box sx={{ opacity: status === 'success' ? 1 : 0, width: 1, textAlign: 'center' }}>
+          <Chip label="success" color="success" />
+        </Box>
         <Table />
       </Box>
     </Box>

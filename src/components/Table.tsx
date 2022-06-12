@@ -1,9 +1,5 @@
 import { TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, Table as MuiTable } from '@mui/material';
-// import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-// import { fetchStoredFiles } from '../form/formApi';
-// import { useInterval } from '../hooks/useInterval';
-// import { setStoredFiles } from '../store/generalSlice';
 import { AppState } from '../store/store';
 
 const Table = (): JSX.Element => {
@@ -19,8 +15,7 @@ const Table = (): JSX.Element => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* remove slice? */}
-          {data.slice(0, 5).map((row, i) => (
+          {data.map((row, i) => (
             <TableRow key={row.name + i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
                 {row.name}

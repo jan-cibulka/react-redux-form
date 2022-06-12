@@ -10,8 +10,10 @@ import CustomField from './CustomField';
 import FileUploadField from './FileUploadField';
 
 export const formName = 'main';
+
 const validate = (values: any) => {
   const errors = {};
+
   //name
   if (!values.name) {
     errors['name'] = 'Required';
@@ -57,7 +59,7 @@ const SimpleForm = props => {
   return (
     <Box sx={{ maxWidth: 1, overflow: 'hidden', width: 0.5 }}>
       <Form onSubmit={handleSubmit(submit)}>
-        <Field name="name" component={CustomField} type="text" label="Name" />
+        <Field name="name" component={CustomField} type="text" label="Name" placeholder="Name" />
         <Field
           name="height"
           component={CustomField}
@@ -66,16 +68,12 @@ const SimpleForm = props => {
           placeholder="Height"
           label="Height"
         />
-
-        {/* <Field name="upload" component={FileUploadField} placeholder="Upload" /> */}
         <Field name="upload" component={FileUploadField} type="file" />
-
         <Box sx={{ mt: 5, display: 'flex', gap: 4, justifyContent: 'center' }}>
           <Button variant="contained" color="primary" type="submit" disabled={pristine || submitting || !valid}>
             Submit
           </Button>
         </Box>
-        {/* <pre>{JSON.stringify(form, undefined, 2)}</pre> */}
       </Form>
     </Box>
   );

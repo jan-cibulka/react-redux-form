@@ -7,7 +7,7 @@ jest.mock('./counterAPI', () => ({
     new Promise<{ data: number }>(resolve => setTimeout(() => resolve({ data: amount }), 500)),
 }));
 
-import { makeStore } from '../../store/store';
+import { makeStore } from '../store/store';
 import Counter from './Counter';
 
 describe('<Counter />', () => {

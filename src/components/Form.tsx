@@ -16,9 +16,7 @@ const validate = (values: any) => {
 
   //name
   if (!values.name) {
-    errors['name'] = 'Required';
-  } else if (values.name.length < 1) {
-    errors['name'] = 'Must be at least one character';
+    errors['name'] = 'Required, must be at least one character';
   } else if (values.name.length > 100) {
     errors['name'] = 'Name is too long';
   }
@@ -64,14 +62,19 @@ const SimpleForm = props => {
           name="height"
           component={CustomField}
           type="number"
-          role="input"
           parse={value => (value ? Number(value) : '')}
           placeholder="Height"
           label="Height"
         />
         <Field name="upload" component={FileUploadField} type="file" role="input" />
         <Box sx={{ mt: 5, display: 'flex', gap: 4, justifyContent: 'center' }}>
-          <Button variant="contained" color="primary" type="submit" disabled={pristine || submitting || !valid}>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={pristine || submitting || !valid}
+            data-testid="submit-form"
+          >
             Submit
           </Button>
         </Box>

@@ -9,7 +9,7 @@ const adaptFileEventToValue = delegate => e => {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const FileInputField = ({ input: { onChange, onBlur }, meta, ...props }): JSX.Element => {
+const FileInputField = ({ input: { onChange, onBlur, name }, meta, ...props }): JSX.Element => {
   const theme = useTheme();
   const form = useSelector((state: AppState) => state.form[formName]);
 
@@ -27,6 +27,7 @@ const FileInputField = ({ input: { onChange, onBlur }, meta, ...props }): JSX.El
           type="file"
           hidden
           id="file-input-field"
+          data-testid={name}
           {...props.input}
           {...props}
         />

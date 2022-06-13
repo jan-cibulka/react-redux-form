@@ -11,6 +11,7 @@ class FormService {
   async submitForm(values: FormValues, dispatch: Dispatch<Action>) {
     dispatch(setStatus('working'));
     const uploadId = await this.submitFileInfo(values);
+    console.log('upload id received', uploadId);
     if (uploadId) {
       this.uploadFile(uploadId, values.upload, dispatch);
     }
@@ -29,6 +30,7 @@ class FormService {
   }
   private async uploadFile(uploadId: string, file: File, dispatch: Dispatch<Action>) {
     const formData = new FormData();
+
     formData.append('file', file);
     const { data } = await http.post(`/upload/${uploadId}`, formData, {
       onUploadProgress: event => {

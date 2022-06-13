@@ -1,15 +1,19 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, EnhancedStore } from '@reduxjs/toolkit';
 import { reducer as reduxFormReducer } from 'redux-form';
 import generalReducer from './generalSlice';
 
-const store = configureStore({
-  reducer: { general: generalReducer, form: reduxFormReducer },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-      immutableCheck: false,
-    }),
-});
+export function makeStore(): EnhancedStore {
+  return configureStore({
+    reducer: { general: generalReducer, form: reduxFormReducer },
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+        immutableCheck: false,
+      }),
+  });
+}
+
+const store = makeStore();
 
 export type AppState = ReturnType<typeof store.getState>;
 

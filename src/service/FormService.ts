@@ -16,7 +16,7 @@ class FormService {
     }
   }
   private async submitFileInfo(values: FormValues) {
-    const { data } = await await http.post('/submit', JSON.stringify({ name: values.name, height: values.height }), {
+    const { data } = await http.post('/submit', JSON.stringify({ name: values.name, height: values.height }), {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -44,6 +44,7 @@ class FormService {
 
   async reloadData(dispatch: Dispatch<Action>) {
     const { data } = await http.get('/data');
+    console.log('reloading data', data);
     if (data) {
       const safeData = FetchStoredFilesResponseSchema.safeParse(data);
       if (safeData.success) {

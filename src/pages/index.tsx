@@ -2,7 +2,7 @@ import { Box, Chip, Typography } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from '~/src/components/Form';
 import Progress from '../components/Progress';
@@ -20,10 +20,6 @@ const IndexPage: NextPage = (): JSX.Element => {
   }, [dispatch]);
 
   useInterval(reloadData, 10000);
-
-  useEffect(() => {
-    reloadData();
-  }, [reloadData]);
 
   return (
     <Box sx={{ width: 1, height: 1 }}>

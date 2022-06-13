@@ -59,16 +59,17 @@ const SimpleForm = props => {
   return (
     <Box sx={{ maxWidth: 1, overflow: 'hidden', width: 0.5 }}>
       <Form onSubmit={handleSubmit(submit)}>
-        <Field name="name" component={CustomField} type="text" label="Name" placeholder="Name" />
+        <Field name="name" component={CustomField} type="text" label="Name" placeholder="Name" role="input" />
         <Field
           name="height"
           component={CustomField}
           type="number"
+          role="input"
           parse={value => (value ? Number(value) : '')}
           placeholder="Height"
           label="Height"
         />
-        <Field name="upload" component={FileUploadField} type="file" />
+        <Field name="upload" component={FileUploadField} type="file" role="input" />
         <Box sx={{ mt: 5, display: 'flex', gap: 4, justifyContent: 'center' }}>
           <Button variant="contained" color="primary" type="submit" disabled={pristine || submitting || !valid}>
             Submit

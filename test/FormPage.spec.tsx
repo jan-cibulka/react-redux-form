@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 import user from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
 import { EnhancedStore } from '@reduxjs/toolkit';
-import { makeStore } from '../store/store';
-import IndexPage from '../pages';
-import http from '../common/http';
+import { makeStore } from '../src/store/store';
+import IndexPage from '../src/pages';
+import http from '../src/common/http';
 
 function route(path = '') {
   return typeof path === 'string' ? new RegExp(path.replace(/:\w+/g, '[^/]+')) : path;
@@ -21,8 +21,8 @@ describe('render', () => {
   beforeAll(() => {
     MockedAxios = new MockAdapter(http);
 
-    file = new File([readFileSync('./src/test/testImage.jpg')], 'testFile');
-    largeFile = new File([readFileSync('./src/test/largeFile.mp4')], 'testFile');
+    file = new File([readFileSync('./test/testImage.jpg')], 'testFile');
+    largeFile = new File([readFileSync('./test/largeFile.mp4')], 'testFile');
 
     MockedAxios.onGet('/data').reply(200, [
       { name: 'John Doe', height: 100, file: 'file.png' },
@@ -62,7 +62,7 @@ describe('render', () => {
     expect(heightInput).toBeInTheDocument();
     expect(fileInput).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
-    expect(store.getState().general.status).not.toBe('initial');
+    expect(store.getState().general.status).toBe('initial');
 
     user.type(nameInput, 'Jenny Tiles');
     user.click(nameInput);

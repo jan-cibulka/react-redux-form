@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { reduxForm, Field, Form } from 'redux-form';
 import { FormValuesSchema } from '../model/schema';
 import FormService from '../service/FormService';
-
 import CustomField from './CustomField';
 import FileUploadField from './FileUploadField';
 

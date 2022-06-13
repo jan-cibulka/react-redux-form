@@ -11,7 +11,6 @@ class FormService {
   async submitForm(values: FormValues, dispatch: Dispatch<Action>) {
     dispatch(setStatus('working'));
     const uploadId = await this.submitFileInfo(values);
-    console.log('upload id received', uploadId);
     if (uploadId) {
       this.uploadFile(uploadId, values.upload, dispatch);
     }
@@ -46,7 +45,7 @@ class FormService {
 
   async reloadData(dispatch: Dispatch<Action>) {
     const { data } = await http.get('/data');
-    console.log('reloading data', data);
+
     if (data) {
       const safeData = FetchStoredFilesResponseSchema.safeParse(data);
       if (safeData.success) {

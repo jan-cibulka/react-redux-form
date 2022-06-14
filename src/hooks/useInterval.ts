@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import { useRef, useEffect } from 'react';
 
-export const useInterval = (callback: Function, delay: number) => {
-  const savedCallback = useRef<Function>();
+export declare type fArgVoid = (...args: any[]) => void;
+export const useInterval = (callback: fArgVoid, delay: number): void => {
+  const savedCallback = useRef<fArgVoid>();
 
   useEffect(() => {
     savedCallback.current = callback;

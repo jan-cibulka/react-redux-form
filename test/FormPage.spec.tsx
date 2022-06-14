@@ -21,8 +21,8 @@ describe('render', () => {
   beforeAll(() => {
     MockedAxios = new MockAdapter(http);
 
-    file = new File([readFileSync('./test/testImage.jpg')], 'testFile');
-    largeFile = new File([readFileSync('./test/largeFile.mp4')], 'testFile');
+    file = new File([readFileSync('./test/littleUnderFileSize.png')], 'testFile');
+    largeFile = new File([readFileSync('./test/littleOverFileSize.png')], 'testFile');
 
     MockedAxios.onGet('/data').reply(200, [
       { name: 'John Doe', height: 100, file: 'file.png' },
@@ -65,9 +65,7 @@ describe('render', () => {
     expect(store.getState().general.status).toBe('initial');
 
     user.type(nameInput, 'Jenny Tiles');
-    user.click(nameInput);
     user.type(heightInput, '400');
-    user.click(heightInput);
     user.upload(fileInput, file);
 
     user.click(submitButton);

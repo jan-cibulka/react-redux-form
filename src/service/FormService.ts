@@ -29,7 +29,6 @@ class FormService {
   }
   private async uploadFile(uploadId: string, file: File, dispatch: Dispatch<Action>) {
     const formData = new FormData();
-
     formData.append('file', file);
     const { data } = await http.post(`/upload/${uploadId}`, formData, {
       onUploadProgress: event => {
@@ -45,7 +44,6 @@ class FormService {
 
   async reloadData(dispatch: Dispatch<Action>) {
     const { data } = await http.get('/data');
-
     if (data) {
       const safeData = FetchStoredFilesResponseSchema.safeParse(data);
       if (safeData.success) {

@@ -30,9 +30,11 @@ const validate = (values: any) => {
   }
 
   //file
-  if (!values.upload) {
-    errors['upload'] = 'Required';
-  } else if (values.upload.size > 10 * 1024 * 1024) {
+
+  // if (!values.upload) {
+  //   errors['upload'] = 'Required';
+  // }
+  else if (values.upload && values.upload.size > 10 * 1024 * 1024) {
     errors['upload'] = 'File is too large';
   }
 

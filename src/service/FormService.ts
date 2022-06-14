@@ -10,7 +10,7 @@ import { setProgress, setStatus, setStoredFiles } from '../store/generalSlice';
 class FormService {
   async submitForm(values: FormValues, dispatch: Dispatch<Action>) {
     const uploadId = await this.submitFileInfo(values);
-    if (uploadId && values.upload) {
+    if (uploadId) {
       dispatch(setStatus('working'));
       this.uploadFile(uploadId, values.upload, dispatch);
     }

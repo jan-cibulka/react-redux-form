@@ -1,63 +1,46 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import { Box, Chip, Typography } from '@mui/material';
+import type { NextPage } from 'next';
+import Head from 'next/head';
 
-import Counter from '../features/counter/Counter'
-import styles from '../styles/Home.module.css'
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from '~/src/components/Form';
+import Progress from '../components/Progress';
+import Table from '../components/Table';
+import { useInterval } from '../hooks/useInterval';
+import FormService from '../service/FormService';
+import { AppState } from '../store/store';
 
-const IndexPage: NextPage = () => {
+const IndexPage: NextPage = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const status = useSelector((state: AppState) => state.general.status);
+
+  const reloadData = useCallback(async () => {
+    await FormService.reloadData(dispatch);
+  }, [dispatch]);
+
+  useInterval(reloadData, 10000);
+
   return (
-    <div className={styles.container}>
+    <Box sx={{ width: 1, height: 1 }}>
       <Head>
-        <title>Redux Toolkit</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Form Website</title>
       </Head>
-      <header className={styles.header}>
-        <img src="/logo.svg" className={styles.logo} alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className={styles.link}
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className={styles.link}
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className={styles.link}
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className={styles.link}
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  )
-}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'center', p: 5 }}>
+        <Box>
+          <Typography variant="h3">File Upload Form</Typography>
+        </Box>
+        <Form />
+        <Box sx={{ opacity: status === 'working' || status === 'success' ? 1 : 0, width: 1 }}>
+          <Progress />
+        </Box>
+        <Box sx={{ opacity: status === 'success' ? 1 : 0, width: 1, textAlign: 'center' }}>
+          <Chip label="success" color="success" />
+        </Box>
+        <Table />
+      </Box>
+    </Box>
+  );
+};
 
-export default IndexPage
+export default IndexPage;

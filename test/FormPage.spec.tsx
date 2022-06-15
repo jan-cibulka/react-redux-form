@@ -69,7 +69,7 @@ describe('render', () => {
     user.upload(fileInput, file);
 
     user.click(submitButton);
-    expect(store.getState().general.status).toBe('working');
+    await waitFor(() => expect(store.getState().general.status).toBe('working'));
     await waitFor(() => expect(store.getState().general.status).toBe('success'));
   });
 
@@ -128,7 +128,8 @@ describe('render', () => {
     expect(screen.queryByText('File is too large')).not.toBeInTheDocument();
     user.click(heightInput);
     user.click(submitButton);
-    expect(store.getState().general.status).toBe('working');
+
+    await waitFor(() => expect(store.getState().general.status).toBe('working'));
     await waitFor(() => expect(store.getState().general.status).toBe('success'));
   });
 });
